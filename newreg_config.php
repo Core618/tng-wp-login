@@ -275,6 +275,12 @@ function checkForTngPathInit() {
 		return array(true, "", "","","");
 	} else {
 	include($wp_tng_path);
+	// Newer TNG versions can leave $rootpath blank in config.php and work it out
+	// at run time. In that case use the folder the admin entered, which we have
+	// just confirmed contains TNG's config.php.
+	if (empty($rootpath)) {
+		$rootpath = $wp_tng_root;
+	}
 	return array(false, $rootpath, $tngdomain, $photopath);
 	}
 }
