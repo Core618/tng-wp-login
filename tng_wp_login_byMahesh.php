@@ -104,7 +104,7 @@ function tng_path_not_specified() {
 	</div>
 	<form action=''  method="post">	
 	<div> 	
-		<input type="text"  style="width: 250px" name="wp_tng_path" value= '<?php if (isset($_POST['wp_tng_path'])) echo ($_POST['wp_tng_path']) ?>' placeholder='TNG Root Path:'>
+		<input type="text"  style="width: 250px" name="wp_tng_path" value= '<?php if (isset($_POST['wp_tng_path'])) echo esc_attr(wp_unslash($_POST['wp_tng_path'])) ?>' placeholder='TNG Root Path:'>
 		TNG Root Path is absolute path to TNG. You may look this up from TNG Admin Setup>Paths and Folders>Root Path or in config.php in TNG folder.
 	</div>
 	<?php
@@ -112,7 +112,7 @@ function tng_path_not_specified() {
 if (isset($_POST["wp_tng_url"])) {
 	?>
 	<div> 	
-		<input style="color: green; width: 250px" type="text"  name="wp_tng_url" value= '<?php if (isset($_POST['wp_tng_url'])) echo $_POST['wp_tng_url'] ; ?>' placeholder='Genealogy URL:' <?php echo $disabled; ?>/>
+		<input style="color: green; width: 250px" type="text"  name="wp_tng_url" value= '<?php if (isset($_POST['wp_tng_url'])) echo esc_attr(wp_unslash($_POST['wp_tng_url'])); ?>' placeholder='Genealogy URL:' <?php echo $disabled; ?>/>
 		Genealogy URL (www.mysite.com/tng) from TNG Admin Setup.
 	</div>
 	<?php
@@ -121,7 +121,7 @@ if (isset($_POST["wp_tng_url"])) {
 if (isset($_POST["wp_tng_photo_folder"])) {
 	?>
 	<div> 	
-		<input style="color: green" type="text"  name="wp_tng_photo_folder" style="width: 250px" value= '<?php if (isset($_POST['wp_tng_photo_folder'])) echo $_POST['wp_tng_photo_folder']; ?>' placeholder='TNG photo folder:' <?php echo $disabled; ?>/>
+		<input style="color: green" type="text"  name="wp_tng_photo_folder" style="width: 250px" value= '<?php if (isset($_POST['wp_tng_photo_folder'])) echo esc_attr(wp_unslash($_POST['wp_tng_photo_folder'])); ?>' placeholder='TNG photo folder:' <?php echo $disabled; ?>/>
 		Name of TNG Photo Folder in TNG Setup.
 	</div>
 	<?php

@@ -46,7 +46,7 @@ function set_plugin_paths() {
 				TNG Root Path: 
 			</div>
 			<div  class='col-md-3'>	
-				<input type="text" class="form-control" name="tng_path" value= '<?php echo $_POST['tng_path']; ?>'>
+				<input type="text" class="form-control" name="tng_path" value= '<?php echo esc_attr(wp_unslash($_POST['tng_path'] ?? '')); ?>'>
 			</div>
 			<div  class='col-md-6'>
 			TNG Root Path is absolute path to TNG. You may look this up from TNG Admin Setup or config.php ($rootpath) in TNG folder.
@@ -57,7 +57,7 @@ function set_plugin_paths() {
 			TNG URL:
 			</div>
 			<div  class='col-md-3'>	
-				<input type="text" class="form-control" name="tng_url" value= '<?php echo $_POST['tng_url']; ?>'>
+				<input type="text" class="form-control" name="tng_url" value= '<?php echo esc_attr(wp_unslash($_POST['tng_url'] ?? '')); ?>'>
 			</div>
 			<div  class='col-md-6'>
 			TNG URL is path to TNG (http://www.mysite.com/tng). You may look this up from TNG Admin Setup or config.php ($tngdomain) in TNG folder.
@@ -68,7 +68,7 @@ function set_plugin_paths() {
 			TNG Photo Folder:
 			</div>
 			<div  class='col-md-3'>	
-				<input type="text" class="form-control" name="tng_photo_folder" value= '<?php echo $_POST['tng_photo_folder']; ?>'>
+				<input type="text" class="form-control" name="tng_photo_folder" value= '<?php echo esc_attr(wp_unslash($_POST['tng_photo_folder'] ?? '')); ?>'>
 			</div>
 			<div  class='col-md-6'>
 			Name of TNG Photo Folder. Derived from TNG setup.
