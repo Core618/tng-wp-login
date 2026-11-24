@@ -31,6 +31,27 @@ $token = $config_paths['tng_success_token'];
 }
 if (!file_exists($tngPath) OR ($token == False) ) {
 add_action( 'admin_notices', 'tng_path_not_specified' ); 
+
+/**
+ * CSRF protection for this plugin's admin settings forms.
+ * tng_wp_login_nonce_field() is printed inside every settings <form>;
+ * tng_wp_login_verify_admin_post() runs before any submitted settings
+ * are processed and stops the request unless it came from that form,
+ * submitted by an administrator.
+ */
+function tng_wp_login_nonce_field() {
+	wp_nonce_field( 'tng_wp_login_admin', '_tng_wp_login_nonce' );
+}
+function tng_wp_login_verify_admin_post() {
+	if ( empty( $_POST ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You do not have permission to change these settings.' ) );
+	}
+	check_admin_referer( 'tng_wp_login_admin', '_tng_wp_login_nonce' );
+}
+
 }
 
 function tng_path_not_specified() {
@@ -103,6 +124,7 @@ function tng_path_not_specified() {
 	<h2>WP - TNG login: We need to know where TNG is installed:</h2>
 	</div>
 	<form action=''  method="post">	
+	<?php tng_wp_login_nonce_field(); ?>
 	<div> 	
 		<input type="text"  style="width: 250px" name="wp_tng_path" value= '<?php if (isset($_POST['wp_tng_path'])) echo esc_attr(wp_unslash($_POST['wp_tng_path'])) ?>' placeholder='TNG Root Path:'>
 		TNG Root Path is absolute path to TNG. You may look this up from TNG Admin Setup>Paths and Folders>Root Path or in config.php in TNG folder.
@@ -129,6 +151,7 @@ if (isset($_POST["wp_tng_photo_folder"])) {
 		$userPromt = "<div style='color: green; font-size: 1em'>Found TNG Tables, ".  $tableToken[1]. ", ". $tableToken[2]. " and ". $tableToken[3]. "</div>";
 	}
 	if (isset($_POST['Update_wp_tng_Paths'])) {
+		tng_wp_login_verify_admin_post();
 		$FindTngFolder = $_POST['Update_wp_tng_Paths'];
 		if ($FindTngFolder == "Find TNG Folder") {
 			$FindTngFolder = "Done. Click to Finish";

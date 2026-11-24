@@ -2,6 +2,7 @@
 require_once (__DIR__. '/../newreg_config.php');
 
 function set_plugin_keys() {
+	tng_wp_login_verify_admin_post();
 	global $success;
     $keys = keyValues();
     $key1 = $keys['key1'];
@@ -38,6 +39,7 @@ function set_plugin_keys() {
 <div class="wrap container"  style='width: auto'>
 
 	<form class="form-group" action=''  method="post">
+<?php tng_wp_login_nonce_field(); ?>
 	<div class="regsubtitle">
 	ReCaptcha Keys:-
 	</div>
