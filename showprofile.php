@@ -4,6 +4,10 @@ require_once "templates/view_profile.html.php";
 require_once "updateprofile.php";
 /** This function drives shortcode [user_profile] ***/
 function show_profile() {
+	// Logged-out visitors get a login link instead of an empty profile form.
+	if (!is_user_logged_in()) {
+		return '<p>Please <a href="' . esc_url(home_url('/login/')) . '">log in</a> to view and edit your profile.</p>';
+	}
 	$configPath = getSubroot() . "config.php";
 	include ($configPath); //require_once stopped working
 	$db = mysqli_connect($database_host, $database_username, $database_password, $database_name);
