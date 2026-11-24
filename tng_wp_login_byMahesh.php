@@ -95,12 +95,14 @@ function tng_path_not_specified() {
 				$config_new["paths"]['tng_success_token'] = $_POST["tng_success_token"];
 				$json = (json_encode($config_new, JSON_PRETTY_PRINT));
 				$path = __DIR__ . "/config.json";
-				file_put_contents($path, $json);
+				if (false === @file_put_contents($path, $json)) {
+					$tngPromt = "<div style='color: red; font-size: 1.2em'>Found TNG, but could not save the settings: the plugin folder (" . esc_html(__DIR__) . ") is not writable by the web server. Please fix its permissions and try again.</div>";
+				}
 			}
 
 	/******************wrap up********************************* */	
 		
-			if ($_POST['wp_tng_path']) $tngPromt = "<div style='color: green; font-size: 1.2em'>Thanks. Found TNG folder</div>"; 
+			if ($_POST['wp_tng_path'] && $tngPromt === "") $tngPromt = "<div style='color: green; font-size: 1.2em'>Thanks. Found TNG folder</div>"; 
 
 			if ($_POST['wp_tng_url']) $urlPromt = "<div style='color: green; font-size: 1em'>Genealogy URL OK</div>";
 			
@@ -164,7 +166,9 @@ if (isset($_POST["wp_tng_photo_folder"])) {
 			$config_new["paths"]['tng_success_token'] = $tableToken[0];
 			$json = (json_encode($config_new, JSON_PRETTY_PRINT));
 			$path = __DIR__ . "/config.json";
-			file_put_contents($path, $json);
+			if (false === @file_put_contents($path, $json)) {
+				echo "<div style='color: red; font-size: 1.2em'>Could not save the settings: the plugin folder (" . esc_html(__DIR__) . ") is not writable by the web server. Please fix its permissions and try again.</div>";
+			}
 			
 		}
 	}

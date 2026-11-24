@@ -267,7 +267,9 @@ function is_logged_in(){
 }
 
 function checkForTngPathInit() {
-	$wp_tng_path = $_POST['wp_tng_path']. 'config.php'; 
+	// Accept the path with or without a trailing slash (and ignore stray spaces).
+	$wp_tng_root = isset($_POST['wp_tng_path']) ? trailingslashit(trim(wp_unslash($_POST['wp_tng_path']))) : '';
+	$wp_tng_path = $wp_tng_root . 'config.php';
 	//$tngFileError = "";
 	if (!file_exists($wp_tng_path) || !is_readable($wp_tng_path)) {	
 		return array(true, "", "","","");
@@ -278,7 +280,9 @@ function checkForTngPathInit() {
 }
 
 function checkTablesInit() {
-	$wp_tng_path = $_POST['wp_tng_path']. 'config.php'; 
+	// Accept the path with or without a trailing slash (and ignore stray spaces).
+	$wp_tng_root = isset($_POST['wp_tng_path']) ? trailingslashit(trim(wp_unslash($_POST['wp_tng_path']))) : '';
+	$wp_tng_path = $wp_tng_root . 'config.php';
 	//$tngFileError = "";
 		include ($wp_tng_path);
 		if($users_table && $media_table && $medialinks_table) {
