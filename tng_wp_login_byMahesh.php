@@ -29,15 +29,14 @@ if ($config) {
 $config_paths = ($config['paths']);
 $token = $config_paths['tng_success_token'];
 }
-if (!file_exists($tngPath) OR ($token == False) ) {
-add_action( 'admin_notices', 'tng_path_not_specified' ); 
-
 /**
  * CSRF protection for this plugin's admin settings forms.
  * tng_wp_login_nonce_field() is printed inside every settings <form>;
  * tng_wp_login_verify_admin_post() runs before any submitted settings
  * are processed and stops the request unless it came from that form,
  * submitted by an administrator.
+ * Defined unconditionally: the settings pages call these whether or not the
+ * TNG path has been set up yet.
  */
 function tng_wp_login_nonce_field() {
 	wp_nonce_field( 'tng_wp_login_admin', '_tng_wp_login_nonce' );
@@ -52,6 +51,8 @@ function tng_wp_login_verify_admin_post() {
 	check_admin_referer( 'tng_wp_login_admin', '_tng_wp_login_nonce' );
 }
 
+if (!file_exists($tngPath) OR ($token == False) ) {
+add_action( 'admin_notices', 'tng_path_not_specified' ); 
 }
 
 function tng_path_not_specified() {
