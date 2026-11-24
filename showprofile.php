@@ -22,6 +22,10 @@ function show_profile() {
 	$data['errors'] = validate_profile($_POST);
 	
 	if (empty($data['errors']) && isset($_POST['submitProfile']))  {
+		// CSRF protection: only accept profile changes submitted from this site's own form.
+		if ( ! isset( $_POST['_tng_wp_login_profile_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_tng_wp_login_profile_nonce'] ) ), 'tng_wp_login_profile' ) ) {
+			wp_die( esc_html__( 'Your session has expired. Please reload the page and try again.' ) );
+		}
 		$post = $_POST;
 		update_wp($post, $data);
 		

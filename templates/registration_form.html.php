@@ -34,7 +34,7 @@ function input($field, $label, $description, $placeholder, $value, $error, $type
 			   class="form-control" 
 			   name="<?php echo $field; ?>" 
 			   placeholder="<?php echo $placeholder; ?>" 
-			   value="<?php echo $value; ?>">
+			   value="<?php echo esc_attr($value); ?>">
 	</div>
 	<div class="col-md-3"><?php echo $description; ?></div>
 </div>
