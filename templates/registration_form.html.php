@@ -127,7 +127,8 @@ if ($_POST && $error) {
 if ($keys['enabled']) {
 ?>
 <div style="color: red" id="alertText"><br /></div>
-<div class="g-recaptcha" style="margin-left: 20px" data-sitekey="<?php echo $keys['key1']; ?>"></div>
+<?php if ( ! empty( $data['errors']['captcha'] ) ) { ?><p class="text-danger" style="margin-left: 20px"><?php echo esc_html( $data['errors']['captcha'] ); ?></p><?php } ?>
+<div class="g-recaptcha" style="margin-left: 20px" data-sitekey="<?php echo esc_attr( $keys['key1'] ); ?>"></div>
 <script>
 function varified(event) {
 console.log(event)

@@ -52,7 +52,7 @@ function set_plugin_keys() {
 				Public Key: 
 			</div>
 			<div  class='col-md-3'>	
-				<input type="text" class="form-control" name="key1" value= '<?php echo $key1; ?>'>
+				<input type="text" class="form-control" name="key1" value= '<?php echo esc_attr($key1); ?>'>
 			</div>
 			<div  class='col-md-6'>
 			Enter Public Key  here to activate ReCaptcha.
@@ -63,7 +63,7 @@ function set_plugin_keys() {
 			Private Key:
 			</div>
 			<div  class='col-md-3'>	
-				<input type="text" class="form-control" name="key2" value= '<?php echo $key2; ?>'>
+				<input type="text" class="form-control" name="key2" value= '<?php echo esc_attr($key2); ?>'>
 			</div>
 			<div  class='col-md-6'>
 			You may enter your Private key here if you think it is safe to do so.
