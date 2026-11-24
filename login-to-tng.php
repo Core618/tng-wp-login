@@ -63,7 +63,12 @@ if (isset($_POST['log'])) {
 	require_once ($wp_path. '/wp-login.php');// need actual url
 }
 
-if (isset($_POST['redirect_to']) && (!isset($_POST['log']) || !isset($_POST['pwd']))) {
+// This file is loaded on every request as part of the plugin, but this redirect
+// is only meant for the login widget, which posts directly to this file.
+// Without the entry-point check it intercepted other plugins' forms that carry
+// a redirect_to field (e.g. the Two Factor code form) before they could run.
+$mutng_is_entry_point = isset($_SERVER['SCRIPT_FILENAME']) && realpath($_SERVER['SCRIPT_FILENAME']) === realpath(__FILE__);
+if ($mutng_is_entry_point && isset($_POST['redirect_to']) && (!isset($_POST['log']) || !isset($_POST['pwd']))) {
 	// Only redirect within this site (prevents open redirects to other domains).
 	wp_safe_redirect(wp_validate_redirect(wp_unslash($_POST['redirect_to']), home_url('/')));
 	exit;
