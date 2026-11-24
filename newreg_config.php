@@ -20,7 +20,7 @@ function nameTng() {
 	//does user name in tng exist
 	global $tng_name_check, $tng_user_name;
 	if(isset($_POST['loginname']))
-	$tng_name_check = ($_POST['loginname']);
+	$tng_name_check = wp_unslash($_POST['loginname']);
 	$tng_path = getSubroot(). "config.php";
 	include ($tng_path); 
 	$db = mysqli_connect($database_host, $database_username, $database_password, $database_name);
@@ -28,8 +28,11 @@ function nameTng() {
 		die("Connection failed: " . $db->connect_error);
 	}
 	$tng_user_table = tngUserTable();
-	$sql = "SELECT * FROM {$tng_user_table} WHERE username='$tng_user_name'";
-	$result = $db->query($sql);
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tng_user_table} WHERE username = ?");
+	$stmt->bind_param('s', $tng_user_name);
+	$stmt->execute();
+	$result = $stmt->get_result();
 	if ($result) {
 		$row = $result->fetch_assoc();
 		//$tng_username = $row["username"];
@@ -39,7 +42,7 @@ function nameTng() {
 }
 
 function emailTng() {
-	$tng_email_check = ($_POST['email']);
+	$tng_email_check = isset($_POST['email']) ? wp_unslash($_POST['email']) : '';
 	//does email in tng exist
 	$tngPath = getSubroot(). "config.php";
 	include ($tngPath);
@@ -48,8 +51,11 @@ function emailTng() {
 	if ($db->connect_error) {
 		die("Connection failed: " . $db->connect_error);
 	}
-	$sql = "SELECT * FROM {$tng_user_table} WHERE email='$tng_email_check'";
-	$result = $db->query($sql);
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tng_user_table} WHERE email = ?");
+	$stmt->bind_param('s', $tng_email_check);
+	$stmt->execute();
+	$result = $stmt->get_result();
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_email = $row['email'];
@@ -171,8 +177,11 @@ function getTngUserName($wp_user) {
 		die("Connection failed: " . $db->connect_error);
 	}
 	$tngUserName = tngUserTable();
-	$sql = "SELECT username FROM {$tngUserName} WHERE username='$wp_user'";
-	$result = $db->query($sql);
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT username FROM {$tngUserName} WHERE username = ?");
+	$stmt->bind_param('s', $wp_user);
+	$stmt->execute();
+	$result = $stmt->get_result();
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_loginname = $row["username"];
@@ -194,8 +203,11 @@ function roleTng() {
 		die("Connection failed: " . $db->connect_error);
 	}
 	$tng_user_table = tngUserTable();
-	$sql = "SELECT * FROM {$tng_user_table} WHERE username='$tng_user_name'";
-	$result = $db->query($sql);
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tng_user_table} WHERE username = ?");
+	$stmt->bind_param('s', $tng_user_name);
+	$stmt->execute();
+	$result = $stmt->get_result();
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_user_role = $row["role"];

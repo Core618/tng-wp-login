@@ -45,8 +45,11 @@ $wp_user = get_currentuser();
 function get_tng_user($db) {
 	$tng_name = (get_currentuser()->user_login);
 	$tngUserTable = tngUserTable();
-	$sql = "SELECT * FROM {$tngUserTable} WHERE username='$tng_name'";
-	$result = $db->query($sql);	
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tngUserTable} WHERE username = ?");
+	$stmt->bind_param('s', $tng_name);
+	$stmt->execute();
+	$result = $stmt->get_result();	
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_username = $row["username"];
@@ -58,15 +61,21 @@ function get_tng_default_photo($db) {
 	$tng_user = get_tng_user($db);
 	$personID = $tng_user['personID'];
 	$tngMediaLinksTable = medialinks_table();
-	$def_photo = "SELECT * FROM {$tngMediaLinksTable} WHERE personID='$personID' AND defphoto=1";
-	$result = $db->query($def_photo);	
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tngMediaLinksTable} WHERE personID = ? AND defphoto=1");
+	$stmt->bind_param('s', $personID);
+	$stmt->execute();
+	$result = $stmt->get_result();	
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_defaultphotoID = $row["mediaID"];
 	}
 	$tngMedia = mediaTable();
-	$def_photo = "SELECT thumbpath FROM {$tngMedia} WHERE mediaID='$tng_defaultphotoID'";
-	$result = $db->query($def_photo);	
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT thumbpath FROM {$tngMedia} WHERE mediaID = ?");
+	$stmt->bind_param('s', $tng_defaultphotoID);
+	$stmt->execute();
+	$result = $stmt->get_result();	
 	if ($result) {
 		$row = $result->fetch_assoc();
 		$tng_defaultphoto_path = $row["thumbpath"];

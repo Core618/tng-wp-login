@@ -130,9 +130,11 @@ function mutng_db_connect() {
     $newdate = date ("Y-m-d H:i:s", time() + ( 3600 * $time_offset ) ); 
     $tngUserTable = tngUserTable(); 
     $db = mysqli_connect($database_host, $database_username, $database_password, $database_name);
-	$sql = "SELECT * FROM {$tngUserTable} WHERE username='$currentuser'"; 
-    
-    $result = $db->query($sql);
+	// Prepared statement: never build SQL from user-controlled values.
+	$stmt = $db->prepare("SELECT * FROM {$tngUserTable} WHERE username = ?");
+	$stmt->bind_param('s', $currentuser);
+	$stmt->execute();
+	$result = $stmt->get_result();
     $row = $result->fetch_assoc();
     return $row;	
 }
