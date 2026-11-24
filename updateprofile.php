@@ -44,7 +44,13 @@ $db = mysqli_connect($database_host, $database_username, $database_password, $da
 if ($db->connect_error) {
     die("Connection failed: " . $db->connect_error);
 	}
-$userName = $_POST['user_login'];
+// Always update the TNG record of the logged-in user. The username used to be
+// taken from the submitted form (user_login), which let a member change that
+// field and overwrite another member's TNG email and password.
+$userName = wp_get_current_user()->user_login;
+if ($userName === '') {
+	return;
+}
 $description = $_POST['display_name'];
 $hashed_pass = $password_type($_POST['new_pass']);
 $notes = $_POST['tng_interest'];;
