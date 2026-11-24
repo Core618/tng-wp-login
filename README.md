@@ -1,3 +1,62 @@
+# Wordpress-TNG Login Widget: Core618 security release
+
+**Version 3.1.4 (Core618 security release)**
+
+This is a maintained fork of [Mahesh Upadhyaya's Wordpress-TNG Login Widget](https://github.com/upavadi/tng-wp-login). It keeps everything the original does and fixes a set of security problems and compatibility issues with current versions of TNG, WordPress and PHP. There are no new features, and setup works the same way.
+
+**Download:** https://github.com/Core618/tng-wp-login/archive/refs/heads/master.zip
+
+---
+
+## What's new in 3.1.4
+
+### Security fixes
+- **SQL injection:** database lookups on the public registration form (and eight others) now use prepared statements.
+- **Account takeover through the profile page:**
+  - the profile form is now protected against cross-site request forgery (CSRF);
+  - a member can no longer change *another* member's TNG email or password by editing a hidden form field.
+- **Admin settings forms:** all 14 now carry WordPress security tokens (nonces), and only administrators can save them.
+- **Cross-site scripting (XSS):** values typed into forms are now escaped before being shown back on the page.
+- **Redirects:** after login and logout, visitors can only be sent to pages on your own site.
+- **Login cookies** are marked secure on HTTPS sites.
+- **reCAPTCHA is now actually checked.** The answer is verified with Google, so bots can no longer skip the box.
+- **Password hash:** the profile page no longer sends the stored password hash to the browser.
+- **Settings files** (`config.json`, `config_privacy.json`, `keyValue.json`) can no longer be downloaded directly on Apache servers. The plugin now ships with empty reCAPTCHA keys; enter your own on the Keys settings page.
+
+### Compatibility and bug fixes
+- **TNG 15:** setup now works when TNG's own *Root Path* setting is blank. TNG 15 leaves it blank and works the path out itself.
+- **TNG root path** is accepted with or without a trailing `/`. The plugin also tells you when it can't save its settings because the folder isn't writable.
+- **Two Factor plugin:** the plugin no longer intercepts other plugins' forms, so two-factor login and re-validation work.
+- **No more crash on profile save or password reset** when TNG uses a password type such as `sha256` or `sha512`. If the type is unknown, the TNG password is simply left unchanged.
+- **Logged-out visitors** to the profile page now get a login link instead of an empty form.
+
+## Tested with
+- TNG 15.0.3
+- WordPress 7.1
+- PHP 8.5
+- Two Factor plugin 0.17
+
+It should still work with the older TNG, WordPress and PHP versions listed in the original README below, but this release hasn't been re-tested on them.
+
+## Upgrading from 3.1.3 or earlier
+The plugin keeps its settings **inside its own folder**. Before replacing the plugin:
+1. Back up `config.json`, `config_privacy.json` and `keyValue.json` from your current plugin folder.
+2. Replace the plugin. Keep the **same folder name** as before (for example `tng-wp-login-master`), so WordPress treats it as the same plugin.
+3. Copy the three files back in.
+
+If you skip step 3, the plugin will ask for your TNG path again and your custom texts and reCAPTCHA keys will be reset.
+
+## Credits and licence
+Original plugin by **Mahesh Upadhyaya** ([upavadi/tng-wp-login](https://github.com/upavadi/tng-wp-login)). Security release maintained by [Core618](https://github.com/Core618). Licensed under the [MIT licence](http://opensource.org/licenses/MIT), as is the original.
+
+These fixes are being offered back to the original project. Until they're accepted there, report issues with this release [here](https://github.com/Core618/tng-wp-login/issues).
+
+---
+---
+
+# Original README by Mahesh Upadhyaya
+*Kept unchanged below for reference. Version numbers and test-site links refer to the original project.*
+
 # **Wordpress-TNG Login Widget** # 
 
 ## **Download**
