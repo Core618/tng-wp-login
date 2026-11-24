@@ -67,6 +67,24 @@ function emailTng() {
 
 
 /*** Initialize ***/
+/**
+ * Hash a password the way TNG is configured to ($tngconfig['password_type']).
+ * The old code called the setting as a PHP function name, e.g. sha256($pw),
+ * which is a fatal error for any type that is not also a PHP function.
+ * Returns null when the type is not supported (caller should then leave the
+ * TNG password unchanged).
+ */
+function tng_wp_login_hash_password($password, $type) {
+	$type = strtolower(trim((string) $type));
+	if ($type === '') {
+		return null; // unknown type: don't guess, leave the TNG password unchanged
+	}
+	if (in_array($type, hash_algos(), true)) {
+		return hash($type, $password);
+	}
+	return null;
+}
+
 function getSubroot() {
 	//alternative place for configuration files
 	$tngPath = getTngPath(); 

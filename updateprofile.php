@@ -52,12 +52,16 @@ if ($userName === '') {
 	return;
 }
 $description = $_POST['display_name'];
-$hashed_pass = $password_type($_POST['new_pass']);
+// Only hash when a new password was entered (this used to run on every save).
+$hashed_pass = !empty($_POST['new_pass']) ? tng_wp_login_hash_password($_POST['new_pass'], $password_type) : null;
 $notes = $_POST['tng_interest'];;
 $realname = $_POST['first_name']. " ". $_POST['last_name'];
 $email = $_POST['user_email'];
 $tngUserTable = tngUserTable();
-if ($_POST['new_pass']) {
+if (!empty($_POST['new_pass']) && $hashed_pass === null) {
+	echo "<div id='msg'>Your profile was saved, but the TNG password could not be changed (unsupported TNG password type '" . esc_html($password_type) . "').</div>";
+}
+if (!empty($_POST['new_pass']) && $hashed_pass !== null) {
 $stmt = $db->prepare("UPDATE {$tngUserTable} SET description=?, email=?, realname=?, notes=?, password=? WHERE username = ?"); 
 $stmt->bind_param("ssssss",$description,$email,$realname,$notes,$hashed_pass,$userName);
 //$sql = "UPDATE tng_users SET description='$description', email='$email',  realname='$realname', notes='$notes', password='$hashed_pass' WHERE username='$userName' ";
